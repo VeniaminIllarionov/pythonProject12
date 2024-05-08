@@ -19,6 +19,8 @@ class Command(BaseCommand):
 
         # Удалите все продукты
         Category.objects.all().delete()
+        # Сброс индефикатора Category
+        Category.truncate_table_restart_id()
         # Удалите все категории
         Product.objects.all().delete()
         # Создайте списки для хранения объектов
