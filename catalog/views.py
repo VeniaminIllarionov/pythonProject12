@@ -8,7 +8,7 @@ def home(request):
     context = {
         'object_list': category_list
     }
-    return render(request, 'home.html', context)
+    return render(request, 'catalog/home.html', context)
 
 
 def contacts(request):
@@ -17,7 +17,7 @@ def contacts(request):
         phone = request.POST.get('phone')
         message = request.POST.get('message')
         print(f'У вас новое сообщение: {name}({phone}): {message}')
-    return render(request, 'contacts.html')
+    return render(request, 'catalog/contacts.html')
 
 
 def products(request):
@@ -25,4 +25,4 @@ def products(request):
     context = {
         'object_list': product_list
     }
-    return render(request, 'products.html', context)
+    return render(request, 'catalog/products.html', context)
