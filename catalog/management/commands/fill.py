@@ -46,7 +46,7 @@ class Command(BaseCommand):
                  "description": product['fields']['description'],
                  "price": product['fields']['price'],
                  "category": Category.objects.get(pk=product['fields']['category']),
-                 "image": product['fields']['image'], "created_at": product['fields']['created_at'],
+                 "images": product['fields']['images'], "created_at": product['fields']['created_at'],
                  "updated_at": product['fields']['updated_at']}
             )
         product_for_create = []
