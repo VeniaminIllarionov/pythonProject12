@@ -16,7 +16,7 @@ class Category(models.Model):
             cursor.execute(f'TRUNCATE TABLE {cls._meta.db_table} RESTART IDENTITY CASCADE')
 
     def __str__(self):
-        return f'{self.name} - {self.description}'
+        return f'{self.name}  '
 
 
 class Product(models.Model):
@@ -33,4 +33,4 @@ class Product(models.Model):
         verbose_name_plural = 'Товары'
 
     def __str__(self):
-        return f'{self.category}{self.name} - {self.description}\n{self.created_at}-{self.updated_at}'
+        return f'{self.name} \n {self.description}'
