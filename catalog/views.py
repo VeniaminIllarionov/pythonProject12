@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 
-from catalog.models import Category, Product
+from catalog.models import Product
 
 
 def home(request):
-    category_list = Category.objects.all()
+    product_list = Product.objects.all()
     context = {
-        'object_list': category_list
+        'object_list': product_list
     }
     return render(request, 'catalog/home.html', context)
 
@@ -18,14 +18,6 @@ def contacts(request):
         message = request.POST.get('message')
         print(f'У вас новое сообщение: {name}({phone}): {message}')
     return render(request, 'catalog/contacts.html')
-
-
-def products(request):
-    product_list = Product.objects.all()
-    context = {
-        'object_list': product_list
-    }
-    return render(request, 'catalog/products.html', context)
 
 
 def product_detail(request, pk):
