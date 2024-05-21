@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from pytils.translit import slugify
@@ -46,10 +47,23 @@ class BlogListView(ListView):
 class BlogDetailView(DetailView):
     model = Blog
 
+    @staticmethod
+    def send_notification():
+        send_mail(
+            subject='Уведомление',
+            message='Ваша блог достигл 100 просмотров!',
+            from_email="benjamin.illarionov@yandex.ru",
+            recipient_list=["venya957@gmail.com"],
+        )
+
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
         self.object.sign_publication += 1
         self.object.save()
+
+        if self.object.sign_publication >= 100:
+            self.send_notification()
+
         return self.object
 
 
