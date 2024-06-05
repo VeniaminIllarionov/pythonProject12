@@ -11,6 +11,12 @@ class ProductListView(ListView):
     model = Product
     template_name = 'catalog/home.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for object in context.get('object_list'):
+            version = Version.objects.filter(current_version=True, product_id=object.pk).first()
+            object.version = version
+        return context
 
 def contacts(request):
     if request.method == 'POST':
