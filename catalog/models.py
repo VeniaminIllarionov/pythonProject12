@@ -1,5 +1,7 @@
 from django.db import models, connection
 
+from users.models import User
+
 
 # Create your models here.
 class Category(models.Model):
@@ -38,10 +40,11 @@ class Product(models.Model):
 
 class Version(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
-    version = models.CharField(max_length=100, verbose_name='Версия')
-    number_version = models.IntegerField(max_length=50, verbose_name='Номер версии')
+    version = models.CharField( verbose_name='Версия')
+    number_version = models.IntegerField(verbose_name='Номер версии')
     current_version = models.BooleanField(default=True, verbose_name='Признак текущей версии')
 
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
     class Meta:
         verbose_name = 'Версия'
         verbose_name_plural = 'Версии'

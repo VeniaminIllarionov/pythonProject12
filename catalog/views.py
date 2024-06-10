@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -18,6 +19,7 @@ class ProductListView(ListView):
             object.version = version
         return context
 
+
 def contacts(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -27,10 +29,12 @@ def contacts(request):
     return render(request, 'catalog/contacts.html')
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -41,11 +45,27 @@ class ProductCreateView(CreateView):
             context_data['formset'] = VersionFormset()
         return context_data
 
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        self.object = form.save()
+        user = self.request.user
+        self.object.owner = user
+        self.object.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        else:
+            return self.form_invalid(form)
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin ,UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -68,11 +88,15 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
