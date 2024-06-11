@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+from config.password_email import password
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -145,7 +147,7 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'benjamin.illarionov@yandex.ru'
-EMAIL_HOST_PASSWORD = 'mcitrxthbjchxxpo'
+EMAIL_HOST_PASSWORD = password
 
 SERVER_EMAIL = 'EMAIL_HOST_USER'
 DEFAULT_FROM_EMAIL = 'EMAIL_HOST_USER'
