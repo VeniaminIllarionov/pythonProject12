@@ -22,7 +22,7 @@ class UserCreateView(CreateView):
         user.is_active = False
         token = secrets.token_hex(20)
         user.token = token
-        user.save()
+        user.save(update_fields=['token', 'is_active'])
         host = self.request.get_host()
         url = f'http://{host}/users/email_confirm/{token}/'
         send_mail(
