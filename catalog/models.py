@@ -29,10 +29,18 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена за покупку')
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateField(auto_now=True, verbose_name='Дата последнего изменения')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
+
+    is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
+        permissions = [
+            ('set_published', 'Может опубликовать товар'),
+            ('can_edit_description', 'Может менять описание'),
+            ('can_edit_category', 'Может менять категорию')
+        ]
 
     def __str__(self):
         return f'{self.name}'

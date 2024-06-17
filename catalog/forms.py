@@ -21,7 +21,7 @@ class StyleFormMixin(forms.ModelForm):
 class ProductForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ('is_published',)
 
     def clean_name(self):
         cleaned_data = self.cleaned_data.get('name')
@@ -30,12 +30,26 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             raise forms.ValidationError('Возникла ошибка в Наименовании')
         return cleaned_data
 
-    def clean_description(self):
-        cleaned_data = self.cleaned_data.get('description')
+
+class ProductManagerForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'is_published', 'category')
+
+    def clean_name(self):
+        cleaned_data = self.cleaned_data.get('name')
 
         if cleaned_data in words:
-            raise forms.ValidationError('Возникла ошибка в Описании')
+            raise forms.ValidationError('Возникла ошибка в Наименовании')
         return cleaned_data
+
+
+def clean_description(self):
+    cleaned_data = self.cleaned_data.get('description')
+
+    if cleaned_data in words:
+        raise forms.ValidationError('Возникла ошибка в Описании')
+    return cleaned_data
 
 
 class VersionForm(StyleFormMixin, forms.ModelForm):
