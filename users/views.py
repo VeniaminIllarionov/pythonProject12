@@ -52,7 +52,7 @@ class GeneratePasswordView(PasswordResetView):
             if user:
                 password = User.objects.make_random_password(length=8)
                 user.set_password(password)
-                user.save()
+                user.save(update_fields=['password'])
                 send_mail(
                     'Смена пароля',
                     f'Ваш новый пароль: {password}',
