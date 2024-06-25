@@ -4,25 +4,13 @@ from catalog.models import Product, Category
 from config.settings import CACHE_ENABLED
 
 
-def get_product_from_cache():
+def get_qs_from_cache(qs, key):
     if not CACHE_ENABLED:
-        return Product.objects.all()
-    key = 'products_list'
-    products = cache.get(key)
-    if products is not None:
-        return products
-    products = Product.objects.all()
-    cache.set(key, products)
-    return products
+        return qs
+    objects = cache.get(key)
+    if objects is not None:
+        return objects
+    objects = qs
+    cache.set(key, qs)
+    return objects
 
-
-def get_category_from_cache():
-    if not CACHE_ENABLED:
-        return Category.objects.all()
-    key = 'categories_list'
-    categories = cache.get(key)
-    if categories is not None:
-        return categories
-    categories = Category.objects.all()
-    cache.set(key, categories)
-    return categories

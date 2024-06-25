@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from catalog.forms import ProductForm, VersionForm, ProductManagerForm, CategoryForm
 from catalog.models import Product, Version, Category
-from catalog.services import get_product_from_cache, get_category_from_cache
+from catalog.services import get_qs_from_cache
 
 
 class ProductListView(ListView):
@@ -16,7 +16,7 @@ class ProductListView(ListView):
     template_name = 'catalog/home.html'
 
     def get_queryset(self):
-        return get_product_from_cache()
+        return get_qs_from_cache(qs=Product.objects.all(), key='products_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -122,4 +122,4 @@ class CategoryListView(ListView):
     template_name = 'catalog/category_list.html'
 
     def get_queryset(self):
-        return get_category_from_cache()
+        return get_qs_from_cache(qs=Category.objects.all(), key='categories_list')
