@@ -1,17 +1,22 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import ProductForm, VersionForm, ProductManagerForm
-from catalog.models import Product, Version
+from catalog.forms import ProductForm, VersionForm, ProductManagerForm, CategoryForm
+from catalog.models import Product, Version, Category
+from catalog.services import get_product_from_cache, get_category_from_cache
 
 
 class ProductListView(ListView):
     model = Product
     template_name = 'catalog/home.html'
+
+    def get_queryset(self):
+        return get_product_from_cache()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -81,7 +86,8 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user == self.object.owner:
             return ProductForm
-        if user.has_perm('catalog.set_published') and user.has_perm('catalog.can_edit_description') and user.has_perm('catalog.can_edit_category'):
+        if user.has_perm('catalog.set_published') and user.has_perm('catalog.can_edit_description') and user.has_perm(
+                'catalog.can_edit_category'):
             return ProductManagerForm
         raise PermissionDenied
 
@@ -109,3 +115,11 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = 'catalog/product_detail.html'
     login_url = "users:login"
     redirect_field_name = "redirect_to"
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'catalog/category_list.html'
+
+    def get_queryset(self):
+        return get_category_from_cache()

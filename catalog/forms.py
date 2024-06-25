@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import BooleanField
 
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
 
 words = ('казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар')
 
@@ -56,3 +56,9 @@ class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
+
+
+class CategoryForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name',)
