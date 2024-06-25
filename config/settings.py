@@ -22,7 +22,7 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG', False) == 'True'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -134,13 +134,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', False) == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False) == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('MAIL_PASSWORD')
 
-SERVER_EMAIL = 'EMAIL_HOST_USER'
-DEFAULT_FROM_EMAIL = 'EMAIL_HOST_USER'
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -148,13 +148,13 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
-CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', False) == 'True'
 
 if CACHE_ENABLED:
     CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": os.getenv('CACHE_LOCATION'),
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.getenv('CACHE_LOCATION'),
         }
     }
 
