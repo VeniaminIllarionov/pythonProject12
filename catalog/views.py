@@ -117,7 +117,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     redirect_field_name = "redirect_to"
 
 
-class CategoryListView(LoginRequiredMixin, ListView):
+class CategoryListView(ListView):
     model = Category
     template_name = 'catalog/category_list.html'
 
